@@ -1,201 +1,800 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Equipos de Fútbol</title>
+<title>Generador de Equipos</title>
 
 <style>
-body{
-    font-family: Arial, sans-serif;
-    margin:20px;
-    background:#f4f4f4;
+
+*{
+    box-sizing:border-box;
 }
 
-h1{
+body{
+    margin:0;
+    padding:15px;
+    font-family:Arial,sans-serif;
+    background:#f3f3f3;
+}
+
+h1,h2,h3{
     text-align:center;
 }
 
 .card{
     background:white;
+    border-radius:12px;
     padding:15px;
-    border-radius:10px;
     margin-bottom:15px;
-    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 
-input, select{
+input,
+select{
     width:100%;
-    padding:8px;
-    margin-top:5px;
+    padding:10px;
     margin-bottom:10px;
 }
 
 button{
     width:100%;
-    padding:10px;
+    padding:12px;
     border:none;
     border-radius:8px;
     cursor:pointer;
-    margin-top:5px;
+    font-weight:bold;
 }
 
-.add{
+.btnAdd{
     background:#28a745;
     color:white;
 }
 
-.generate{
+.btnGenerate{
     background:#007bff;
     color:white;
 }
 
-.delete{
+.btnDelete{
     background:#dc3545;
     color:white;
+    margin-top:5px;
 }
 
 .player{
+    padding:10px;
     border-bottom:1px solid #ddd;
-    padding:10px 0;
+}
+
+.player:last-child{
+    border-bottom:none;
+}
+
+.playerRow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.playerInfo{
+    flex:1;
+}
+
+.teams{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
 }
 
 .team{
-    background:white;
-    padding:15px;
-    border-radius:10px;
-    margin-top:15px;
+    flex:1;
+    min-width:350px;
 }
+
+.teamHeader{
+    color:white;
+    text-align:center;
+    padding:10px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.red{
+    background:#c62828;
+}
+
+.yellow{
+    background:#d4a017;
+    color:black;
+}
+
+.field{
+    position:relative;
+    height:700px;
+    background:#2f8f2f;
+    border:3px solid white;
+    border-radius:12px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.field:before{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:50%;
+    border-top:2px solid white;
+}
+
+.field:after{
+    content:"";
+    position:absolute;
+    width:120px;
+    height:120px;
+    border:2px solid white;
+    border-radius:50%;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+}
+
+.playerDot{
+    position:absolute;
+    transform:translate(-50%,-50%);
+    background:white;
+    border-radius:15px;
+    padding:4px 8px;
+    font-size:12px;
+    font-weight:bold;
+    white-space:nowrap;
+    box-shadow:0 1px 4px rgba(0,0,0,.4);
+}
+
+.stats{
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
 </style>
+
 </head>
+
 <body>
 
-<h1>⚽ Equipos de Fútbol</h1>
+<h1>⚽ Generador de Equipos</h1>
 
 <div class="card">
-    <h3>Añadir jugador</h3>
 
-    <input type="text" id="nombre" placeholder="Nombre">
+<h3>Añadir Jugador</h3>
 
-    <input type="number" id="nivel" min="1" max="5" step="0.1" placeholder="Nivel">
+<input
+id="nombre"
+placeholder="Nombre">
 
-    <input type="text" id="pos1" placeholder="Posición principal">
+<input
+id="nivel"
+type="number"
+min="1"
+max="5"
+step="0.1"
+placeholder="Nivel">
 
-    <input type="text" id="pos2" placeholder="Posición secundaria">
+<label>Posición principal</label>
+<select id="pos1">
+    <option>Lateral</option>
+    <option>Central</option>
+    <option>Medio Centro</option>
+    <option>Extremo</option>
+    <option>Delantero</option>
+</select>
 
-    <button class="add" onclick="agregarJugador()">Añadir jugador</button>
+<label>Posición secundaria</label>
+<select id="pos2">
+    <option>Ninguna</option>
+    <option>Lateral</option>
+    <option>Central</option>
+    <option>Medio Centro</option>
+    <option>Extremo</option>
+    <option>Delantero</option>
+</select>
+
+<label>Posición tercera</label>
+<select id="pos3">
+    <option>Ninguna</option>
+    <option>Lateral</option>
+    <option>Central</option>
+    <option>Medio Centro</option>
+    <option>Extremo</option>
+    <option>Delantero</option>
+</select>
+
+<button
+class="btnAdd"
+onclick="agregarJugador()">
+
+Añadir Jugador
+
+</button>
+
 </div>
 
 <div class="card">
-    <h3>Jugadores</h3>
-    <div id="listaJugadores"></div>
 
-    <button class="generate" onclick="crearEquipos()">
-        Generar equipos equilibrados
-    </button>
+<h3>Convocados</h3>
+
+<div id="listaJugadores"></div>
+
+<button
+class="btnGenerate"
+onclick="crearEquipos()">
+
+⚽ Generar Equipos
+
+</button>
+
 </div>
 
 <div id="resultado"></div>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-<script>
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-let jugadores = JSON.parse(localStorage.getItem("jugadores")) || [];
+const firebaseConfig = {
+  apiKey: "AIzaSyCeqZC6U-6Ci7-Lg-TwGxM504FXfwWxvRU",
+  authDomain: "pachanga-miercoles-e2208.firebaseapp.com",
+  projectId: "pachanga-miercoles-e2208",
+  storageBucket: "pachanga-miercoles-e2208.firebasestorage.app",
+  messagingSenderId: "880358366371",
+  appId: "1:880358366371:web:dccd6688e84cd9137c3316"
+};
 
-function guardar(){
-    localStorage.setItem("jugadores", JSON.stringify(jugadores));
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-function agregarJugador(){
+let jugadores = [];
+    async function cargarJugadores(){
 
-    const nombre = document.getElementById("nombre").value;
-    const nivel = parseFloat(document.getElementById("nivel").value);
-    const pos1 = document.getElementById("pos1").value;
-    const pos2 = document.getElementById("pos2").value;
+    const snapshot =
+    await getDocs(
+        collection(db,"jugadores")
+    );
 
-    if(!nombre || !nivel) return;
+    jugadores = [];
 
-    jugadores.push({
-        nombre,
-        nivel,
-        pos1,
-        pos2
+    snapshot.forEach(docu=>{
+
+        jugadores.push({
+            firebaseId: docu.id,
+            ...docu.data()
+        });
+
     });
 
-    guardar();
     mostrarJugadores();
+}
+
+async function guardarJugadorFirebase(jugador){
+
+    await addDoc(
+        collection(db,"jugadores"),
+        jugador
+    );
+
+    await cargarJugadores();
+}
+
+
+
+async function agregarJugador(){
+    const nombre =
+    document.getElementById("nombre").value.trim();
+
+    const nivel =
+    parseFloat(
+        document.getElementById("nivel").value
+    );
+
+    const pos1 =
+    document.getElementById("pos1").value;
+
+    const pos2 =
+    document.getElementById("pos2").value;
+
+    const pos3 =
+    document.getElementById("pos3").value;
+
+    if(!nombre || !nivel){
+        alert("Introduce nombre y nivel");
+        return;
+    }
+
+ await guardarJugadorFirebase({
+
+    id: Date.now(),
+    nombre,
+    nivel,
+    pos1,
+    pos2,
+    pos3,
+    presente:true
+
+});
 
     document.getElementById("nombre").value="";
     document.getElementById("nivel").value="";
-    document.getElementById("pos1").value="";
-    document.getElementById("pos2").value="";
 }
 
-function borrarJugador(i){
-    jugadores.splice(i,1);
-    guardar();
-    mostrarJugadores();
+async function borrarJugador(id){
+
+    const jugador =
+    jugadores.find(
+        j=>j.id===id
+    );
+
+    if(!jugador) return;
+
+    await deleteDoc(
+        doc(
+            db,
+            "jugadores",
+            jugador.firebaseId
+        )
+    );
+
+    await cargarJugadores();
+}
+
+function cambiarAsistencia(id){
+
+    const jugador =
+    jugadores.find(j => j.id === id);
+
+    jugador.presente =
+    !jugador.presente;
+
+    guardarJugadores();
 }
 
 function mostrarJugadores(){
 
     let html="";
 
-    jugadores.forEach((j,i)=>{
+    jugadores.forEach(j=>{
 
         html += `
+
         <div class="player">
-            <b>${j.nombre}</b> (${j.nivel})
-            <br>
-            ${j.pos1} / ${j.pos2}
-            <button class="delete" onclick="borrarJugador(${i})">
-                Borrar
+
+            <div class="playerRow">
+
+                <input
+                    type="checkbox"
+                    ${j.presente ? "checked" : ""}
+                    onchange="cambiarAsistencia(${j.id})">
+
+                <div class="playerInfo">
+
+                    <b>${j.nombre}</b>
+
+                    (${j.nivel})
+
+                    <br>
+
+                    ${j.pos1}
+                    /
+                    ${j.pos2}
+
+                </div>
+
+            </div>
+
+            <button
+            class="btnDelete"
+            onclick="borrarJugador(${j.id})">
+
+            Borrar
+
             </button>
+
+        </div>
+
+        `;
+    });
+
+    document.getElementById(
+        "listaJugadores"
+    ).innerHTML = html;
+}
+
+cargarJugadores();
+function crearEquipos(){
+
+    let presentes =
+    jugadores.filter(j=>j.presente);
+
+    if(presentes.length < 10){
+        alert("Muy pocos jugadores");
+        return;
+    }
+
+    presentes.sort(
+        (a,b)=>b.nivel-a.nivel
+    );
+
+    let rojo=[];
+    let amarillo=[];
+
+    let puntosRojo=0;
+    let puntosAmarillo=0;
+
+    presentes.forEach(j=>{
+
+        if(
+            puntosRojo <= puntosAmarillo
+        ){
+            rojo.push({...j});
+            puntosRojo += j.nivel;
+        }else{
+            amarillo.push({...j});
+            puntosAmarillo += j.nivel;
+        }
+
+    });
+
+    asignarPortero(rojo);
+    asignarPortero(amarillo);
+
+    pintarResultado(
+        rojo,
+        amarillo,
+        puntosRojo,
+        puntosAmarillo
+    );
+}
+
+function asignarPortero(equipo){
+
+    let portero =
+    equipo.find(j =>
+        j.pos1==="Portero" ||
+        j.pos2==="Portero" ||
+        j.pos3==="Portero"
+    );
+
+    if(portero){
+        portero.rolCampo="POR";
+        return;
+    }
+
+    let aleatorio =
+    Math.floor(
+        Math.random()*equipo.length
+    );
+
+    equipo[aleatorio].rolCampo="POR";
+}
+
+function obtenerFormacion(num){
+
+    if(num >= 12){
+
+        return [
+            "POR",
+            "LAT","CEN","CEN","LAT",
+            "MED","MED","MED",
+            "EXT","EXT",
+            "DEL","DEL"
+        ];
+
+    }
+
+    return [
+        "POR",
+        "LAT","CEN","CEN","LAT",
+        "MED","MED","MED",
+        "EXT","EXT",
+        "DEL"
+    ];
+}
+
+function coincide(jugador, rol){
+
+    const mapa = {
+        "LAT":"Lateral",
+        "CEN":"Central",
+        "MED":"Medio Centro",
+        "EXT":"Extremo",
+        "DEL":"Delantero"
+    };
+
+    let posicion = mapa[rol];
+
+    return (
+        jugador.pos1===posicion ||
+        jugador.pos2===posicion ||
+        jugador.pos3===posicion
+    );
+}
+
+function puntuacionPosicion(jugador, rol){
+
+    const mapa = {
+        LAT:"Lateral",
+        CEN:"Central",
+        MED:"Medio Centro",
+        EXT:"Extremo",
+        DEL:"Delantero"
+    };
+
+    const posicion = mapa[rol];
+
+    if(jugador.pos1 === posicion) return 100;
+    if(jugador.pos2 === posicion) return 50;
+    if(jugador.pos3 === posicion) return 20;
+
+    return -1;
+}
+
+function asignarRoles(equipo){
+
+    let disponibles = [...equipo];
+
+    let formacion =
+    obtenerFormacion(equipo.length);
+
+    let resultado = [];
+
+    formacion.forEach(rol=>{
+
+        if(rol==="POR"){
+
+            let por =
+            disponibles.find(
+                j=>j.rolCampo==="POR"
+            );
+
+            if(por){
+
+                resultado.push({
+                    ...por,
+                    rolCampo:"POR",
+                    calidadPosicion:"🟢"
+                });
+
+                disponibles =
+                disponibles.filter(
+                    j=>j.id!==por.id
+                );
+            }
+
+            return;
+        }
+
+        let mejorJugador = null;
+        let mejorPuntuacion = -1;
+
+        disponibles.forEach(j=>{
+
+            let puntos =
+            puntuacionPosicion(j,rol);
+
+            if(
+                puntos > mejorPuntuacion
+            ){
+                mejorPuntuacion = puntos;
+                mejorJugador = j;
+            }
+
+        });
+
+        if(
+            !mejorJugador ||
+            mejorPuntuacion < 0
+        ){
+            return;
+        }
+
+        let icono="🟢";
+
+        if(mejorPuntuacion===50){
+            icono="🟡";
+        }
+
+        if(mejorPuntuacion===20){
+            icono="🟠";
+        }
+
+        resultado.push({
+            ...mejorJugador,
+            rolCampo:rol,
+            calidadPosicion:icono
+        });
+
+        disponibles =
+        disponibles.filter(
+            j=>j.id!==mejorJugador.id
+        );
+
+    });
+
+    disponibles.forEach(j=>{
+
+        resultado.push({
+            ...j,
+            rolCampo:"BAN",
+            calidadPosicion:"❌"
+        });
+
+    });
+
+    return resultado;
+}
+function dibujarCampo(equipo){
+
+    equipo =
+    asignarRoles(equipo);
+
+    const posiciones = {
+
+        "POR":[[50,92]],
+
+        "LAT":[
+            [18,75],
+            [82,75]
+        ],
+
+        "CEN":[
+            [40,75],
+            [60,75]
+        ],
+
+        "MED":[
+            [30,50],
+            [50,45],
+            [70,50]
+        ],
+
+        "EXT":[
+            [18,22],
+            [82,22]
+        ],
+
+        "DEL":[
+            [50,10],
+            [38,10]
+        ],
+
+        "BAN":[
+            [10,96],
+            [25,96],
+            [40,96]
+        ]
+    };
+
+    let usados = {
+        POR:0,
+        LAT:0,
+        CEN:0,
+        MED:0,
+        EXT:0,
+        DEL:0,
+        BAN:0
+    };
+
+    let html =
+    '<div class="field">';
+
+    equipo.forEach(j=>{
+
+        let rol =
+        j.rolCampo;
+
+        let indice =
+        usados[rol] || 0;
+
+        let coords =
+        posiciones[rol];
+
+        if(
+            indice >= coords.length
+        ){
+            indice =
+            coords.length-1;
+        }
+
+        usados[rol]++;
+
+        let p =
+        coords[indice];
+
+        html += `
+        <div
+        class="playerDot"
+        style="
+        left:${p[0]}%;
+        top:${p[1]}%;
+        ">
+            ${j.nombre} ${j.calidadPosicion || ""}
         </div>
         `;
     });
 
-    document.getElementById("listaJugadores").innerHTML = html;
+    html += "</div>";
+
+    return html;
 }
+function pintarResultado(
+    rojo,
+    amarillo,
+    puntosRojo,
+    puntosAmarillo
+){
 
-function crearEquipos(){
+    let diferencia =
+    Math.abs(
+        puntosRojo-puntosAmarillo
+    ).toFixed(1);
 
-    let lista = [...jugadores];
+    document.getElementById(
+        "resultado"
+    ).innerHTML = `
 
-    lista.sort((a,b)=>b.nivel-a.nivel);
+    <div class="stats">
 
-    let equipoA=[];
-    let equipoB=[];
+        🟥 Equipo Rojo:
+        ${puntosRojo.toFixed(1)}
 
-    let puntosA=0;
-    let puntosB=0;
+        |
 
-    lista.forEach(j=>{
+        🟨 Equipo Amarillo:
+        ${puntosAmarillo.toFixed(1)}
 
-        if(puntosA<=puntosB){
-            equipoA.push(j);
-            puntosA+=j.nivel;
-        }else{
-            equipoB.push(j);
-            puntosB+=j.nivel;
-        }
-    });
+        <br><br>
 
-    let html=`
-    <div class="team">
-        <h2>Equipo A (${puntosA.toFixed(1)})</h2>
-        ${equipoA.map(j=>`${j.nombre} (${j.nivel})`).join("<br>")}
+        Diferencia:
+        ${diferencia}
+
     </div>
 
-    <div class="team">
-        <h2>Equipo B (${puntosB.toFixed(1)})</h2>
-        ${equipoB.map(j=>`${j.nombre} (${j.nivel})`).join("<br>")}
+    <div class="teams">
+
+        <div class="team">
+
+            <div class="teamHeader red">
+                EQUIPO ROJO
+            </div>
+
+            ${dibujarCampo(rojo)}
+
+        </div>
+
+        <div class="team">
+
+            <div class="teamHeader yellow">
+                EQUIPO AMARILLO
+            </div>
+
+            ${dibujarCampo(amarillo)}
+
+        </div>
+
     </div>
+
     `;
-
-    document.getElementById("resultado").innerHTML = html;
 }
-
-mostrarJugadores();
 
 </script>
 
