@@ -320,6 +320,7 @@ async function agregarJugador(){
         alert("Introduce nombre y nivel");
         return;
     }
+    window.agregarJugador = agregarJugador;
 
  await guardarJugadorFirebase({
 
@@ -356,6 +357,7 @@ async function borrarJugador(id){
 
     await cargarJugadores();
 }
+    window.borrarJugador = borrarJugador;
 
 function cambiarAsistencia(id){
 
@@ -367,6 +369,7 @@ function cambiarAsistencia(id){
 
     guardarJugadores();
 }
+    window.cambiarAsistencia = cambiarAsistencia;
 
 function mostrarJugadores(){
 
@@ -429,6 +432,7 @@ function crearEquipos(){
         alert("Muy pocos jugadores");
         return;
     }
+    window.crearEquipos = crearEquipos;
 
     presentes.sort(
         (a,b)=>b.nivel-a.nivel
